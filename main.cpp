@@ -8,7 +8,7 @@ using namespace std;
 int image = 0; //image shown
 GLuint vaoID, vboID;// the buffers that are going to be linked too
 //vertices
-GLfloat vertexarray[]= {0.5f,0.5f,0.0f,
+GLfloat triVertexarray[]= {0.5f,0.5f,0.0f,
 				-0.5f,0.5f,0.0f,
 				0.0f,-0.5f,0.0f}; // vertices that are drawn x,y,z ...
 GLfloat squareVertexarray[]= {0.75f,0.75f,0.0f,
@@ -17,16 +17,24 @@ GLfloat squareVertexarray[]= {0.75f,0.75f,0.0f,
 					-0.75f,0.75f,0.0f}; // vertices that are drawn x,y,z ...
 GLfloat octVertexarray[] =   {0.5f,0.2f,0.0f,
 					0.2f,0.5f,0.0f,
+					0.2f,0.5f,0.0f,
+					-0.2f,0.5f,0.0f,
 					-0.2f,0.5f,0.0f,
 					-0.5f,0.2f,0.0f,
+					-0.5f,0.2f,0.0f,
+					-0.5f,-0.2f,0.0f,
 					-0.5f,-0.2f,0.0f,
 					-0.2f,-0.5f,0.0f,
+					-0.2f,-0.5f,0.0f,
 					0.2f,-0.5f,0.0f,
-					0.5f,-0.2f,0.0f}; //vertices that are drawn x,y,z ...
+					0.2f,-0.5f,0.0f,
+					0.5f,-0.2f,0.0f,
+					0.5f,-0.2f,0.0f,
+					0.5f,0.2f,0.0f}; //vertices that are drawn x,y,z ...
 //indices
-GLubyte indices[3]={0,1,2};
+GLubyte triIndices[3]={0,1,2};
 GLubyte squareIndices[4]={0,1,2,3};
-GLubyte octIndices[8]={0,1,2,3,4,5,6,7};
+GLubyte octIndices[16]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 
 void initTriangle()
 {
@@ -35,7 +43,7 @@ void initTriangle()
   glBindVertexArray(vaoID);//bind the object to the array
   glGenBuffers(1, &vboID);//generates object name for the Vertex Buffer Object
   glBindBuffer(GL_ARRAY_BUFFER, vboID);//bind the object to the array
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);//allocates the memory of the vertices
+  glBufferData(GL_ARRAY_BUFFER, sizeof(triVertexarray), triVertexarray, GL_STATIC_DRAW);//allocates the memory of the vertices
   ShaderInfo shaders[]=
   { //create the shader specified by my initshaders input
     { GL_VERTEX_SHADER , "vertexshader.glsl"} ,
@@ -45,7 +53,7 @@ void initTriangle()
   initShaders(shaders);//creates shaders	
   glEnableVertexAttribArray(0);//enables the vertex attribute index 
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);//specified the start the vertice array used to the draw
-  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, indices);//draws object based on indices of the polygon
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, triIndices);//draws object based on indices of the polygon
   glDisableVertexAttribArray(0);
   glFlush();//make sure the processes finish
 }
@@ -87,7 +95,7 @@ void initOct()
   initShaders(shaders);//creates shaders	
   glEnableVertexAttribArray(0);//enables the vertex attribute index 
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);//specified the start the vertice array used to the draw
-  glDrawElements(GL_LINES,8, GL_UNSIGNED_BYTE, octIndices);//draws object based on indices of the polygon
+  glDrawElements(GL_LINES,16, GL_UNSIGNED_BYTE, octIndices);//draws lines to simulate an octagon
   glDisableVertexAttribArray(0);
   glFlush();//make sure the processes finish
 }
@@ -140,7 +148,7 @@ int main(int argc, char **argv)
 {
   //Freeglut window and context management	
   glutInit(&argc, argv);
-  glutCreateWindow("Dots, triangle, and square"); //creates the window
+  glutCreateWindow("Octagon, Square, and Triangle"); //creates the window
   
   //initializes glew
   glewExperimental=GL_TRUE;
